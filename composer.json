@@ -1,0 +1,16 @@
+{
+    "name": "umbalaconmeogia/yii2-api",
+	"type": "yii2-extension",
+	"description": "Helper classes to create RESTful API in yii2.",
+    "authors": [
+        {
+            "name": "Tran Trung Thanh",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"umbalaconmeogia\\yii2api\\": "src/"}
+    },
+	"keywords": ["yii2", "utility"],
+	"license": "MIT"
+}
