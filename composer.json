@@ -11,6 +11,9 @@
     "autoload": {
         "psr-4": {"umbalaconmeogia\\yii2api\\": "src/"}
     },
-	"keywords": ["yii2", "utility"],
-	"license": "MIT"
+    "require": {
+        "yiisoft/yii2-httpclient",
+    },
+    "keywords": ["yii2", "utility"],
+    "license": "MIT"
 }
