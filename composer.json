@@ -12,7 +12,7 @@
         "psr-4": {"umbalaconmeogia\\yii2api\\": "src/"}
     },
     "require": {
-        "yiisoft/yii2-httpclient",
+        "yiisoft/yii2-httpclient"
     },
     "keywords": ["yii2", "utility"],
     "license": "MIT"
