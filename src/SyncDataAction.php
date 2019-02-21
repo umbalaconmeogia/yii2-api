@@ -16,7 +16,7 @@ class SyncDataAction extends Action
     /**
      * @var string the scenario to be assigned to the new model before it is validated and saved.
      */
-    public $keyField = 'uuid';
+    public $keyField = 'id';
 
     /**
      * Name of parameter that provides data for upadte.
@@ -42,10 +42,10 @@ class SyncDataAction extends Action
         $modelArrays = \Yii::$app->request->getBodyParam($this->syncDataParam);
 //         \Yii::info("Data: " . print_r($modelArrays, TRUE));
         foreach ($modelArrays as $modelAttributes) {
-            $user = $this->modelClass::findOneCreateNew([$this->keyField => $modelAttributes[$this->keyField]]);
-            $user->scenario = ApiModelInterface::SCENARIO_SYNC_DATA;
-            $user->attributes = $modelAttributes;
-            $user->saveThrowError();
+            $model = $this->modelClass::findOneCreateNew([$this->keyField => $modelAttributes[$this->keyField]]);
+            $model->scenario = ApiModelInterface::SCENARIO_SYNC_DATA;
+            $model->attributes = $modelAttributes;
+            $model->saveThrowError();
         }
     }
 }

@@ -26,7 +26,7 @@ class ApiClient extends Component
      */
     public $urlRoot;
 
-    public function request($apiName, $queryData)
+    public function request($apiName, $queryData, $requestMethod = 'POST')
     {
         $client = new Client([
             'baseUrl' => $this->urlRoot,
@@ -35,7 +35,7 @@ class ApiClient extends Component
         $request = $client
             ->createRequest()
             ->addHeaders(['Authorization' => 'Basic ' . base64_encode("{$this->clientUser}:{$this->clientPassword}")])
-            ->setMethod('POST')
+            ->setMethod($requestMethod)
             ->setUrl($apiName)
             ->setData($queryData);
         $response = $request->send();
@@ -44,17 +44,6 @@ class ApiClient extends Component
 
     public function get($apiName, $queryData)
     {
-        $client = new Client([
-            'baseUrl' => $this->urlRoot,
-            'transport' => 'yii\httpclient\CurlTransport',
-        ]);
-        $request = $client
-        ->createRequest()
-        ->addHeaders(['Authorization' => 'Basic ' . base64_encode("{$this->clientUser}:{$this->clientPassword}")])
-        ->setMethod('GET')
-        ->setUrl($apiName)
-        ->setData($queryData);
-        $response = $request->send();
-        return $response;
+        return $this->request($apiName, $queryData, 'GET');
     }
 }
