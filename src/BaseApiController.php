@@ -4,6 +4,7 @@ namespace umbalaconmeogia\yii2api;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\web\IdentityInterface;
+use yii\filters\AccessControl;
 
 class BaseApiController extends ActiveController
 {
@@ -16,7 +17,26 @@ class BaseApiController extends ActiveController
             'class' => HttpBasicAuth::className(),
             'auth' => [$this, 'basicAuth'],
         ];
+        $behaviors['access'] = [
+            'class' => AccessControl::className(),
+            'rules' => [
+                [
+                    'allow' => true,
+                    'ips' => $this->allowedAccessIPs(),
+                ],
+            ],
+        ];
         return $behaviors;
+    }
+
+    /**
+     * Limit accessible IPs.
+     * Subclass may overwrite this function to allow another IPs.
+     * @return string[]
+     */
+    protected function allowedAccessIPs()
+    {
+        return ['127.0.0.1', '::1'];
     }
 
     /**
