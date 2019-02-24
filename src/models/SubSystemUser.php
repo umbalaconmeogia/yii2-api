@@ -1,8 +1,7 @@
 <?php
-namespace common\models;
+namespace umbalaconmeogia\yii2api\models;
 
-use batsg\helpers\HRandom;
-use Yii;
+use batsg\models\BaseBatsgModel;
 use yii\base\NotSupportedException;
 use yii\web\IdentityInterface;
 
@@ -18,7 +17,7 @@ use yii\web\IdentityInterface;
  * @property string $username
  * @property string $auth_key
  */
-class SubSystemUser extends BaseAppModel implements IdentityInterface
+class SubSystemUser extends BaseBatsgModel implements IdentityInterface
 {
     /**
      * {@inheritdoc}
@@ -26,6 +25,11 @@ class SubSystemUser extends BaseAppModel implements IdentityInterface
     public static function tableName()
     {
         return 'sub_system_user';
+    }
+
+    protected function uniqueIdAttributeName()
+    {
+        return 'id';
     }
 
     /**

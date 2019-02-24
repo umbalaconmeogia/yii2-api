@@ -1,8 +1,6 @@
 <?php
-namespace api\models;
+namespace umbalaconmeogia\yii2api\models;
 
-use common\models\SubSystemUser;
-use umbalaconmeogia\yii2api\models\ApiModelInterface;
 
 class ApiSubSystemUser extends SubSystemUser implements \umbalaconmeogia\yii2api\models\ApiModelInterface, \yii\filters\RateLimitInterface
 {
