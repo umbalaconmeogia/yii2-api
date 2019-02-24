@@ -1,5 +1,5 @@
 <?php
-namespace umbalaconmeogia\yii2api;
+namespace umbalaconmeogia\yii2api\actions;
 
 use yii\base\Model;
 use yii\rest\Action;

@@ -1,10 +1,9 @@
 <?php
-namespace umbalaconmeogia\yii2api;
+namespace umbalaconmeogia\yii2api\controllers;
 
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
-use yii\web\IdentityInterface;
-use yii\filters\AccessControl;
 
 class BaseApiController extends ActiveController
 {
@@ -44,7 +43,7 @@ class BaseApiController extends ActiveController
      *
      * @param string $username
      * @param string $password
-     * @return IdentityInterface
+     * @return \yii\web\IdentityInterface
      */
     public function basicAuth($username, $password)
     {
@@ -60,7 +59,7 @@ class BaseApiController extends ActiveController
     {
         $actions = parent::actions();
         $actions['sync-data'] = [
-            'class' => SyncDataAction::class,
+            'class' => \umbalaconmeogia\yii2api\actions\SyncDataAction::class,
             'modelClass' => $this->modelClass,
             'syncDataParam' => $this->syncDataParam,
             'checkAccess' => [$this, 'checkAccess'],

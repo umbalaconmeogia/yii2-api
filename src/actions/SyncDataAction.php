@@ -1,8 +1,8 @@
 <?php
-namespace umbalaconmeogia\yii2api;
+namespace umbalaconmeogia\yii2api\actions;
 
+use umbalaconmeogia\yii2api\models\ApiModelInterface;
 use yii\rest\Action;
-use Yii;
 
 /**
  * SyncDataAction implements the API endpoint for synchronizing data from the given data.
@@ -44,6 +44,7 @@ class SyncDataAction extends Action
         foreach ($modelArrays as $modelAttributes) {
             $model = $this->modelClass::findOneCreateNew([$this->keyField => $modelAttributes[$this->keyField]]);
             $model->scenario = ApiModelInterface::SCENARIO_SYNC_DATA;
+            unset($modelAttributes[$this->keyField]); // This is for Yii not raise warning "Failed to set unsafe attribute 'id'"
             $model->attributes = $modelAttributes;
             $model->saveThrowError();
         }
