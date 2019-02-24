@@ -21,6 +21,7 @@ class BaseApiController extends ActiveController
             'rules' => [
                 [
                     'allow' => true,
+                    'roles' => ['@'],
                     'ips' => $this->allowedAccessIPs(),
                 ],
             ],
