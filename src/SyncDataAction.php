@@ -40,7 +40,7 @@ class SyncDataAction extends Action
         }
 
         $modelArrays = \Yii::$app->request->getBodyParam($this->syncDataParam);
-//         \Yii::info("Data: " . print_r($modelArrays, TRUE));
+        \Yii::trace("Data: " . print_r($modelArrays, TRUE), __METHOD__);
         foreach ($modelArrays as $modelAttributes) {
             $model = $this->modelClass::findOneCreateNew([$this->keyField => $modelAttributes[$this->keyField]]);
             $model->scenario = ApiModelInterface::SCENARIO_SYNC_DATA;
