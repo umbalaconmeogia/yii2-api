@@ -11,6 +11,8 @@ use yii\base\Component;
  */
 class ApiClient extends Component
 {
+    const HEASDER_KEY_AUTHORIZATION = 'Authorization';
+
     /**
      * @var string
      */
@@ -24,22 +26,24 @@ class ApiClient extends Component
     /**
      * @var string
      */
-    public $urlRoot;
+    public $baseUrl;
 
     public function request($apiName, $queryData, $requestMethod = 'POST')
     {
         $client = new Client([
-            'baseUrl' => $this->urlRoot,
             'transport' => 'yii\httpclient\CurlTransport',
+            'baseUrl' => $this->baseUrl,
         ]);
-        $request = $client
-            ->createRequest()
-            ->addHeaders(['Authorization' => 'Basic ' . base64_encode("{$this->clientUser}:{$this->clientPassword}")])
+        // Copy header from current request.
+        $request = $client->createRequest();
+        $request->setHeaders(\Yii::$app->request->headers)
+            ->getHeaders()->remove(self::HEASDER_KEY_AUTHORIZATION); // Remove Authorization.
+        // Set another request attributes.
+        $request->addHeaders([self::HEASDER_KEY_AUTHORIZATION => 'Basic ' . base64_encode("{$this->clientUser}:{$this->clientPassword}")])
             ->setMethod($requestMethod)
             ->setUrl($apiName)
             ->setData($queryData);
-        $response = $request->send();
-        return $response;
+        return $request->send();
     }
 
     public function get($apiName, $queryData)
