@@ -1,6 +1,7 @@
 <?php
 namespace umbalaconmeogia\yii2api\controllers;
 
+use umbalaconmeogia\yii2api\models\ConsumerApiAuth;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
@@ -12,6 +13,7 @@ class BaseApiController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
+        $behaviors['rateLimiter']['enableRateLimitHeaders'] = false;
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::className(),
             'auth' => [$this, 'basicAuth'],
@@ -40,15 +42,15 @@ class BaseApiController extends ActiveController
     }
 
     /**
-     * Sub class should implement this function to check basic authentication from input username and password.
-     *
+	 * Basic authenticate.
      * @param string $username
      * @param string $password
      * @return \yii\web\IdentityInterface
      */
     public function basicAuth($username, $password)
     {
-        throw new \Exception(__METHOD__ . ' is not implemented.');
+        \Yii::trace(__METHOD__ . "($username, $password)", __METHOD__);
+        return ConsumerApiAuth::findAllowClient($username, $password);
     }
 
     /**
