@@ -11,7 +11,8 @@ use yii\base\Component;
  */
 class ApiClient extends Component
 {
-    const HEASDER_KEY_AUTHORIZATION = 'Authorization';
+    const HEADERS_KEY_AUTHORIZATION = 'Authorization';
+    const HEADERS_KEY_ACCEPT = 'Accept';
 
     /**
      * @var string
@@ -28,7 +29,13 @@ class ApiClient extends Component
      */
     public $baseUrl;
 
-    public function request($apiName, $queryData, $requestMethod = 'POST')
+    /**
+     * Accept return result.
+     * @var string
+     */
+    public $headerAccept = 'application/json';
+
+    public function request($apiName, $queryData = null, $requestMethod = 'POST')
     {
         $client = new Client([
             'transport' => 'yii\httpclient\CurlTransport',
@@ -36,17 +43,22 @@ class ApiClient extends Component
         ]);
         // Copy header from current request.
         $request = $client->createRequest();
-        $request->setHeaders(\Yii::$app->request->headers)
-            ->getHeaders()->remove(self::HEASDER_KEY_AUTHORIZATION); // Remove Authorization.
+        $request->setHeaders(\Yii::$app->request->headers);
+        $headers = $request->getHeaders();
+        $headers->remove(self::HEADERS_KEY_AUTHORIZATION); // Remove Authorization.
+        $headers->remove(self::HEADERS_KEY_ACCEPT); // Remove Accept.
         // Set another request attributes.
-        $request->addHeaders([self::HEASDER_KEY_AUTHORIZATION => 'Basic ' . base64_encode("{$this->clientUser}:{$this->clientPassword}")])
+        $request->addHeaders([
+                self::HEADERS_KEY_AUTHORIZATION => 'Basic ' . base64_encode("{$this->clientUser}:{$this->clientPassword}"),
+                self::HEADERS_KEY_ACCEPT => $this->headerAccept,
+            ])
             ->setMethod($requestMethod)
             ->setUrl($apiName)
             ->setData($queryData);
         return $request->send();
     }
 
-    public function get($apiName, $queryData)
+    public function get($apiName, $queryData = null)
     {
         return $this->request($apiName, $queryData, 'GET');
     }
