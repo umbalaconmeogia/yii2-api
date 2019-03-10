@@ -6,6 +6,7 @@ use yii\base\Component;
 
 /**
  * Class to help requesting to an API.
+ *
  * @author thanh
  *
  */
@@ -35,6 +36,33 @@ class ApiClient extends Component
      */
     public $headerAccept = 'application/json';
 
+    /**
+     * Usage example:
+     * <pre>
+     *  $apiClient = \Yii::createObject(ApiClient::class);
+     *  $request = ['sub-systems/request', 'sub_system' => $this->sub_system_client_user, 'request' => 'sub-system-user/sync-data'];
+     *  $param = [
+     *      'SubSystemUser' => [
+     *          [
+     *              'id' => $user->id,
+     *              'username' => $user->username,
+     *              'auth_key' => $user->auth_key,
+     *              'data_status' => $this->access ? User::DATA_STATUS_ACTIVE : User::DATA_STATUS_DELETE,
+     *          ],
+     *      ],
+     *  ];
+     *  $clientResponse = $apiClient->request($request, $param);
+     * </pre>
+     *
+     * TODO: Consider to add following setting into request headers.
+     * Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+     * Accept-Encoding: gzip, deflate
+     *
+     * @param string|array $apiName Request part from URL root.
+     * @param string|array $queryData Body of POST method. May be a string or an array (which will be converted automatically to x-www-form-urlencoded).
+     * @param string $requestMethod 'GET' or 'POST'
+     * @return \yii\httpclient\Response
+     */
     public function request($apiName, $queryData = null, $requestMethod = 'POST')
     {
         $client = new Client([
@@ -43,10 +71,6 @@ class ApiClient extends Component
         ]);
         // Copy header from current request.
         $request = $client->createRequest();
-        $request->setHeaders(\Yii::$app->request->headers);
-        $headers = $request->getHeaders();
-        $headers->remove(self::HEADERS_KEY_AUTHORIZATION); // Remove Authorization.
-        $headers->remove(self::HEADERS_KEY_ACCEPT); // Remove Accept.
         // Set another request attributes.
         $request->addHeaders([
                 self::HEADERS_KEY_AUTHORIZATION => 'Basic ' . base64_encode("{$this->clientUser}:{$this->clientPassword}"),
@@ -58,7 +82,7 @@ class ApiClient extends Component
         return $request->send();
     }
 
-    public function get($apiName, $queryData = null)
+    public function requestGet($apiName, $queryData = null)
     {
         return $this->request($apiName, $queryData, 'GET');
     }
