@@ -1,4 +1,5 @@
 <?php
+namespace umbalaconmeogia\yii2api\migrations;
 
 use batsg\migrations\BaseMigrationCreateTable;
 
